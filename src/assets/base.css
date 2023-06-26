@@ -1,0 +1,23 @@
+:root {
+  --dim: #ccc;
+  --dark: #333;
+  --light: #fff;
+  --darkBar: #000;
+  --lightBar: #fff;
+  --sun: #fff000;
+  --checkBox: #0b76ef;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  outline: none;
+  text-decoration: none;
+}
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--light);
+}

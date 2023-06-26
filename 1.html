@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      var customerData=[{
+        email:'1',
+        name:'nmb'
+      }]
+      var request = window.indexedDB.open("MyTestDatabase");
+      request.onerror = function (event) {
+        alert("Why didn't you allow my web app to use IndexedDB?!");
+      };
+      request.onsuccess = function (event) {
+        db = event.target.result;
+      };
+      request.onupgradeneeded = function (event) {
+        // 保存 IDBDataBase 接口
+        var db = event.target.result;
+
+        // 为该数据库创建一个对象仓库
+        var objectStore = db.createObjectStore("customers", { keyPath: "email" });
+        // 建立一个索引来通过姓名来搜索客户。名字可能会重复，所以我们不能使用 unique 索引
+        objectStore.createIndex("name", "name", { unique: false });
+
+        // 使用邮箱建立索引，我们向确保客户的邮箱不会重复，所以我们使用 unique 索引
+        objectStore.createIndex("email", "email", { unique: true });
+        objectStore.transaction.oncomplete = function (event) {
+          // 将数据保存到新创建的对象仓库
+          var customerObjectStore = db
+            .transaction("customers", "readwrite")
+            .objectStore("customers");
+          customerData.forEach(function (customer) {
+            console.log(customer);
+            customerObjectStore.add(customer);
+          });
+        };
+      };
+    </script>
+  </body>
+</html>
